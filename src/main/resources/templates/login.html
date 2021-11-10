@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <title>Login - news portal</title>
+</head>
+
+<body>
+<header>
+    <header class="moveble">
+        <div class="home">
+            <form action="/" method="post">
+                <button type="submit" class="home">Главная</button>
+            </form>
+        </div>
+        <h1 style="margin-left: auto; margin-right: auto; font:normal 24px Georgia; text-align: center; color: #e5e5e5">Новостной портал Deadline.com</h1>
+    </header>
+</header>
+
+<div class="action-form">
+    <form method="post" action="/auth/login">
+        <br>
+        <br>
+        <div class="form-control"><label for="username">username</label> <input type="text" id="username" name="username"  placeholder="Username" required>
+        </div>
+        <br>
+        <br>
+        <div class="form-control"><label for="password">password</label> <input type="password" id="password" name="password" placeholder="Password" required>
+        </div>
+        <br>
+        <br>
+        <button type="submit" class="form-control-button">Авторизоваться</button>
+    </form>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Upload - news portal</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<header>
+    <header class="moveble">
+        <div sec:authorize="hasAuthority('user:create_article')" class="auth">
+            <form action="/auth/logout" method="post">
+                <button type="submit" class="auth">Выйти</button>
+            </form>
+        </div>
+        <div class="home">
+            <form action="/" method="post">
+                <button type="submit" class="home">Главная</button>
+            </form>
+        </div>
+        <div>
+            <form sec:authorize="hasAuthority('user:create_article')" action="/upload" method="post">
+                <button type="submit">Загрузить статью</button>
+            </form>
+        </div>
+        <h1 style="margin-left: auto; margin-right: auto; font:normal 24px Georgia; text-align: center; color: #e5e5e5">Новостной портал Deadline.com</h1>
+    </header>
+</header>
+
+<div class="action-form">
+<form action="/upload/info" method="post" enctype="multipart/form-data">
+    <br>
+    <br>
+    <div class="form-control">
+    <input style="color: #e5e5e5" type="file" name="file" accept=".zip">
+    </div>
+    <br>
+    <br>
+    <button type="submit" class="form-control-button">Отправить</button>
+</form>
+    <p>
+        <div th:if="${message}" th:text="${message}" th:class="${name}"></div>
+    </p>
+</div>
+</body>
+
+</html>

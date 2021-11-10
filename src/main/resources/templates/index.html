@@ -1,0 +1,97 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Main - news portal</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var tickers = document.getElementsByTagName("dl");
+            for (i = 0; i < tickers.length; i++) {
+                var currentTicker = tickers[i];
+                var createClickHandler =
+                    function(ticker)
+                    {
+                        return function() {
+                            var id = ticker.getElementsByTagName("dt")[0].id;
+                            document.location.href = '/article/'+id;
+                        };
+                    };
+                currentTicker.onclick = createClickHandler(currentTicker);
+            }
+        })
+    </script>
+
+</head>
+<body>
+<header>
+    <header class="moveble">
+        <div sec:authorize="!hasAuthority('user:create_article')" class="auth">
+            <form action="/auth/login" method="post">
+                <button type="submit" class="auth">Войти</button>
+            </form>
+        </div>
+        <div sec:authorize="hasAuthority('user:create_article')" class="auth">
+            <form action="/auth/logout" method="post">
+                <button type="submit" class="auth">Выйти</button>
+            </form>
+        </div>
+        <div class="home">
+            <form action="/" method="post">
+                <button type="submit" class="home">Главная</button>
+            </form>
+        </div>
+        <div>
+            <form sec:authorize="hasAuthority('user:create_article')" action="/upload" method="post">
+                <button type="submit">Загрузить статью</button>
+            </form>
+        </div>
+        <h1 style="margin-left: auto; margin-right: auto; font:normal 24px Georgia; text-align: center; color: #e5e5e5">Новостной портал Deadline.com</h1>
+    </header>
+</header>
+<div class="filter">
+    <form action="/" method="post" id="form" >
+        <div th:if="${checkboxOn}" th:each="check : ${checkboxOn}">
+            <p>
+                <input type="checkbox" name="checkboxName" th:value="${check}" th:id="${'id-' + check}" checked>
+                <label th:for="${'id-' + check}" th:text="${check}" ></label>
+            </p>
+        </div>
+        <div th:if="${checkBoxOff}" th:each="check2 : ${checkBoxOff}">
+            <p>
+                <input type="checkbox" name="checkboxName" th:value="${check2}" th:id="${'id-' + check2}">
+                <label th:for="${'id-' + check2}" th:text="${check2}" ></label>
+            </p>
+        </div>
+        <input type="text" name="page" id="page" class="page" th:value="${page}" hidden>
+        <button type="submit" class="actionButton">Фильтровать</button>
+    </form>
+</div>
+<br>
+<br>
+<div th:each="article : ${articles}" class="articles">
+    <dl id="ticker" class="ticker">
+        <dt class="heading" th:id="${{article.getARTICLE_ID()}}" th:text="${{article.getHEADER()}}">
+        </dt><dd class="text" th:text="${{article.getBODY()}}"></dd>
+        <dd class="hastags"><b th:each="rubric : ${article.getRubrics()}" th:text="${{'#' + rubric.getRUBRIC_NAME()}}"></b></dd>
+    </dl>
+</div>
+<div class="moveble" style="bottom:0; width: 100%;">
+    <nav class="one">
+        <ul class="pagination" th:if="${numbers}">
+            <li th:each="pageNumber : ${numbers}"
+                th:class="${pageNumber==page} ? active">
+                <a th:href="@{'/?page=' + ${pageNumber}}"
+                   th:text="${pageNumber + 1}"
+                ></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+
+</html>
